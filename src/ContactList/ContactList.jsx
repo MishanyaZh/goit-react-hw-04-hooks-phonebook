@@ -11,7 +11,7 @@ const ContactList = ({ contacts, onDeleteContact }) => (
           <button
             className={css.listButton}
             type="button"
-            onClick={() => onDeleteContact(id)}
+            onClick={() => onDeleteContact(id, name)}
           >
             delete
           </button>
