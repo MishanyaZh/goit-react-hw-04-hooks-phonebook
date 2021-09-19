@@ -18,40 +18,41 @@ const App = () => {
   ]);
 
   const [filter, setFilter] = useState('');
+  const localStorageKeyName = 'contacts';
 
   useEffect(() => {
-    const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
+    const parsedContacts = JSON.parse(
+      localStorage.getItem(localStorageKeyName),
+    );
     setContacts(parsedContacts);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem(localStorageKeyName, JSON.stringify(contacts));
   }, [contacts]);
 
   const changeFilter = e => {
     setFilter(e.currentTarget.value);
   };
 
-  const formSubmitHandler = data => {
+  const formSubmitHandler = ({ name, number }) => {
     const newContact = {
-      name: data.name,
-      number: data.number,
+      name,
+      number,
       id: uuidv4(),
     };
 
     setContacts(prevState => {
       const doubleContact = prevState.find(contact =>
-        contact.name.toLowerCase().includes(data.name.toLowerCase()),
+        contact.name.toLowerCase().includes(name.toLowerCase()),
       );
 
-      if (doubleContact && doubleContact.name.length === data.name.length) {
-        toast.error(`${data.name} is already in contacts`);
+      if (doubleContact && doubleContact.name.length === name.length) {
+        toast.error(`${name} is already in contacts`);
         return [...prevState];
-      }
-      // return [newContact, ...prevState.contacts];
-      else {
+      } else {
         setContacts([newContact, ...prevState]);
-        toast.success(`${data.name} add to Contacts`, { icon: '👏' });
+        toast.success(`${name} add to Contacts`, { icon: '👏' });
       }
     });
   };
@@ -63,7 +64,6 @@ const App = () => {
     toast.success(`${name} delete with Contacts!`);
   };
 
-  // finnd contact to includ word with filter
   const getVisibleContacts = () => {
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
@@ -71,7 +71,7 @@ const App = () => {
     );
   };
 
-  const visibleName = getVisibleContacts();
+  const filltredContacts = getVisibleContacts();
 
   return (
     <MContainer title="Phonebook">
@@ -81,9 +81,12 @@ const App = () => {
 
       <Section title="Contacts">
         <Filter onChange={changeFilter} value={filter} />
-        <ContactList contacts={visibleName} onDeleteContact={deleteContact} />
+        <ContactList
+          contacts={filltredContacts}
+          onDeleteContact={deleteContact}
+        />
       </Section>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
     </MContainer>
   );
 };
