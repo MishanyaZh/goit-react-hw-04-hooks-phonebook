@@ -71,7 +71,7 @@ const App = () => {
     );
   };
 
-  const filltredContacts = getVisibleContacts();
+  const filteredContacts = getVisibleContacts();
 
   return (
     <MContainer title="Phonebook">
@@ -82,7 +82,7 @@ const App = () => {
       <Section title="Contacts">
         <Filter onChange={changeFilter} value={filter} />
         <ContactList
-          contacts={filltredContacts}
+          contacts={filteredContacts}
           onDeleteContact={deleteContact}
         />
       </Section>
